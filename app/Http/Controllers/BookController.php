@@ -8,55 +8,26 @@ class BookController extends Controller
 {
     private function getBooks()
     {
-        return [
-            1 => [
-                'id' => 1,
-                'title' => 'Harry Potter and the Sorcerer\'s Stone',
-                'author' => 'J.K. Rowling',
-                'year' => 1997,
-                'category' => 'Fantasy'
-            ],
+        $path = storage_path('app/books.json');
 
-            2 => [
-                'id' => 2,
-                'title' => 'The Hobbit',
-                'author' => 'J.R.R. Tolkien',
-                'year' => 1937,
-                'category' => 'Fantasy'
-            ],
+        if (!file_exists($path)) {
+            return [];
+        }
 
-            3 => [
-                'id' => 3,
-                'title' => 'The Little Prince',
-                'author' => 'Antoine de Saint-Exupery',
-                'year' => 1943,
-                'category' => 'Classic'
-            ],
+        return json_decode(
+            file_get_contents($path),
+            true
+        ) ?? [];
+    }
 
-            4 => [
-                'id' => 4,
-                'title' => 'Alice\'s Adventures in Wonderland',
-                'author' => 'Lewis Carroll',
-                'year' => 1865,
-                'category' => 'Classic'
-            ],
+    private function saveBooks($books)
+    {
+        $path = storage_path('app/books.json');
 
-            5 => [
-                'id' => 5,
-                'title' => 'The Chronicles of Narnia',
-                'author' => 'C.S. Lewis',
-                'year' => 1950,
-                'category' => 'Fantasy'
-            ],
-
-            6 => [
-                'id' => 6,
-                'title' => 'Pride and Prejudice',
-                'author' => 'Jane Austen',
-                'year' => 1813,
-                'category' => 'Romance'
-            ],
-        ];
+        file_put_contents(
+            $path,
+            json_encode($books, JSON_PRETTY_PRINT)
+        );
     }
 
     public function index(Request $request)
@@ -74,17 +45,13 @@ class BookController extends Controller
             $authorMatch = true;
 
             if ($category !== '') {
-                $categoryMatch = strcasecmp(
-                    $book['category'],
-                    $category
-                ) === 0;
+                $categoryMatch =
+                    strcasecmp($book['category'], $category) === 0;
             }
 
             if ($author !== '') {
-                $authorMatch = strcasecmp(
-                    $book['author'],
-                    $author
-                ) === 0;
+                $authorMatch =
+                    strcasecmp($book['author'], $author) === 0;
             }
 
             if ($categoryMatch && $authorMatch) {
@@ -101,12 +68,37 @@ class BookController extends Controller
 
     public function create()
     {
-        //
+        return view('books.create');
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|max:150',
+            'author' => 'required|max:100',
+            'year' => 'required|numeric|min:1000|max:2026',
+            'category' => 'required|in:Fantasy,Classic,Romance',
+        ]);
+
+        $books = $this->getBooks();
+
+        $newId = empty($books)
+            ? 1
+            : max(array_column($books, 'id')) + 1;
+
+        $books[$newId] = [
+            'id' => $newId,
+            'title' => $validated['title'],
+            'author' => $validated['author'],
+            'year' => $validated['year'],
+            'category' => $validated['category'],
+        ];
+
+        $this->saveBooks($books);
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', 'Book added successfully!');
     }
 
     public function show($id)
@@ -118,21 +110,6 @@ class BookController extends Controller
         abort_if(!$book, 404);
 
         return view('books.show', compact('book'));
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update($id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
     }
 
     public function featured()

@@ -8,14 +8,15 @@
 
     <h1>Add Movie</h1>
 
-    <form action="{{ route('movies.store') }}" method="POST">
+    <form action="{{ route('movies.store') }}"
+          method="POST">
 
         @csrf
 
-        <!-- Title -->
         <div class="mb-3">
 
-            <label for="title" class="form-label">
+            <label for="title"
+                   class="form-label">
                 Title
             </label>
 
@@ -36,10 +37,10 @@
         </div>
 
 
-        <!-- Director -->
         <div class="mb-3">
 
-            <label for="director" class="form-label">
+            <label for="director"
+                   class="form-label">
                 Director
             </label>
 
@@ -60,10 +61,10 @@
         </div>
 
 
-        <!-- Genre -->
         <div class="mb-3">
 
-            <label for="genre" class="form-label">
+            <label for="genre"
+                   class="form-label">
                 Genre
             </label>
 
@@ -103,10 +104,10 @@
         </div>
 
 
-        <!-- Year -->
         <div class="mb-3">
 
-            <label for="year" class="form-label">
+            <label for="year"
+                   class="form-label">
                 Year
             </label>
 
@@ -127,30 +128,26 @@
         </div>
 
 
-        <!-- Buttons -->
-        <div class="mb-4">
+        <button
+            type="submit"
+            class="btn btn-success">
+            + Add Movie
+        </button>
 
-            <button type="submit" class="btn btn-success">
-                + Add Movie
-            </button>
-
-            <a href="{{ route('movies.index') }}"
-               class="btn btn-secondary">
-                Cancel
-            </a>
-
-        </div>
+        <a
+            href="{{ route('movies.index') }}"
+            class="btn btn-secondary">
+            Cancel
+        </a>
 
     </form>
 
-
-    <!-- Prepared By -->
 
     <div class="text-center mt-5 mb-3">
 
         <p>
             Prepared by:
-            <strong>Aira Basco</strong>
+            <strong>Edshieline Kaye</strong>
         </p>
 
     </div>

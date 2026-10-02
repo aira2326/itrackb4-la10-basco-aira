@@ -1,37 +1,46 @@
 @extends('layouts.app')
 
-@section('title', $movie['title'])
+@section('title', $book['title'])
 
 @section('content')
 
-<h2>Movie App</h2>
+<div class="container mt-4">
 
-<div class="card mt-3" style="max-width: 500px;">
+    <h1>{{ $book['title'] }}</h1>
 
-    <div class="card-body">
+    <table class="table table-bordered">
 
-        <h3 class="mb-4">{{ $movie['title'] }}</h3>
+        <tr>
+            <th>ID</th>
+            <td>{{ $book['id'] }}</td>
+        </tr>
 
-        <p>
-            <strong>Author:</strong>
-            {{ $movie['author'] }}
-        </p>
+        <tr>
+            <th>Title</th>
+            <td>{{ $book['title'] }}</td>
+        </tr>
 
-        <p>
-            <strong>Year Published:</strong>
-            {{ $movie['year'] }}
-        </p>
+        <tr>
+            <th>Author</th>
+            <td>{{ $book['author'] }}</td>
+        </tr>
 
-        <p>
-            <strong>Category:</strong>
-            {{ $movie['genre'] }}
-        </p>
+        <tr>
+            <th>Year</th>
+            <td>{{ $book['year'] }}</td>
+        </tr>
 
-        <a href="{{ route('movies.index') }}" class="btn btn-secondary">
-            Back to Movies
-        </a>
+        <tr>
+            <th>Category</th>
+            <td>{{ $book['category'] }}</td>
+        </tr>
 
-    </div>
+    </table>
+
+    <a href="{{ route('books.index') }}"
+       class="btn btn-secondary">
+        Back to Books
+    </a>
 
 </div>
 

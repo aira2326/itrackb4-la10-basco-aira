@@ -16,9 +16,7 @@ class MovieController extends Controller
 
         $json = file_get_contents($path);
 
-        $movies = json_decode($json, true);
-
-        return $movies ?? [];
+        return json_decode($json, true) ?? [];
     }
 
     private function saveMovies($movies)
@@ -31,11 +29,30 @@ class MovieController extends Controller
         );
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $genre = $request->query('genre', '');
+        $search = $request->query('search', '');
+
         $movies = $this->getAllMovies();
 
-        return view('movies.index', compact('movies'));
+        if ($genre !== '') {
+            $movies = array_filter($movies, function ($movie) use ($genre) {
+                return strcasecmp($movie['genre'], $genre) === 0;
+            });
+        }
+
+        if ($search !== '') {
+            $movies = array_filter($movies, function ($movie) use ($search) {
+                return stripos($movie['title'], $search) !== false;
+            });
+        }
+
+        return view('movies.index', [
+            'movies' => $movies,
+            'genre' => $genre,
+            'search' => $search
+        ]);
     }
 
     public function create()
@@ -73,32 +90,6 @@ class MovieController extends Controller
             ->with('success', 'Movie added successfully!');
     }
 
-    public function featured()
-    {
-        $movies = $this->getAllMovies();
-
-        $featured = array_filter($movies, function ($movie) {
-            return $movie['year'] >= 2010;
-        });
-
-        return view('movies.index', [
-            'movies' => $featured
-        ]);
-    }
-
-    public function filter($genre = null)
-    {
-        $movies = $this->getAllMovies();
-
-        if ($genre) {
-            $movies = array_filter($movies, function ($movie) use ($genre) {
-                return strtolower($movie['genre']) === strtolower($genre);
-            });
-        }
-
-        return view('movies.filter', compact('movies', 'genre'));
-    }
-
     public function show($id)
     {
         $movies = $this->getAllMovies();
@@ -110,5 +101,20 @@ class MovieController extends Controller
         $movie = $movies[$id];
 
         return view('movies.show', compact('movie'));
+    }
+
+    public function featured()
+    {
+        $movies = $this->getAllMovies();
+
+        $featured = array_filter($movies, function ($movie) {
+            return $movie['year'] >= 2020;
+        });
+
+        return view('movies.index', [
+            'movies' => $featured,
+            'genre' => '',
+            'search' => ''
+        ]);
     }
 }

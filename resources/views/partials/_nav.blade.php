@@ -1,4 +1,5 @@
-<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
     <div class="container">
 
         <a class="navbar-brand"
@@ -10,7 +11,7 @@
 
             <a class="nav-link"
                href="{{ route('movies.index') }}">
-                Movies
+                All Movies
             </a>
 
             <a class="nav-link"
@@ -18,7 +19,28 @@
                 Featured
             </a>
 
+            <a class="nav-link"
+               href="{{ route('movies.index', ['genre' => 'Sci-Fi']) }}">
+                Sci-Fi
+            </a>
+
+            <a class="nav-link"
+               href="{{ route('movies.index', ['genre' => 'Action']) }}">
+                Action
+            </a>
+
+            <a class="nav-link"
+               href="{{ route('movies.index', ['genre' => 'Crime']) }}">
+                Crime
+            </a>
+
+            <a class="nav-link"
+               href="{{ route('movies.create') }}">
+                + Add Movie
+            </a>
+
         </div>
 
     </div>
+
 </nav>

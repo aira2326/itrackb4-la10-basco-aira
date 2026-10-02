@@ -6,15 +6,8 @@
 
 <div class="container mt-4">
 
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Movies</h1>
 
-        <h1>Movies</h1>
-
-    </div>
-
-
-    <!-- Navigation -->
     <div class="mb-3">
 
         <a href="{{ route('movies.index') }}"
@@ -27,17 +20,17 @@
             Featured
         </a>
 
-        <a href="{{ route('movies.filter', ['genre' => 'Sci-Fi']) }}"
+        <a href="{{ route('movies.index', ['genre' => 'Sci-Fi']) }}"
            class="btn btn-info">
             Sci-Fi
         </a>
 
-        <a href="{{ route('movies.filter', ['genre' => 'Action']) }}"
+        <a href="{{ route('movies.index', ['genre' => 'Action']) }}"
            class="btn btn-warning">
             Action
         </a>
 
-        <a href="{{ route('movies.filter', ['genre' => 'Crime']) }}"
+        <a href="{{ route('movies.index', ['genre' => 'Crime']) }}"
            class="btn btn-danger">
             Crime
         </a>
@@ -45,50 +38,87 @@
     </div>
 
 
-    <!-- List of Recommendations -->
     <div class="card mb-4">
 
-        <div class="card-header bg-primary text-white">
-            List of Recommendations
+        <div class="card-header">
+            Filter Movies
         </div>
 
         <div class="card-body">
 
-            <ul class="list-group">
+            <form method="GET"
+                  action="{{ route('movies.index') }}">
 
-                <li class="list-group-item">
-                    <strong>Inception</strong>
-                    - Sci-Fi - 2010
-                </li>
+                <div class="row">
 
-                <li class="list-group-item">
-                    <strong>The Dark Knight</strong>
-                    - Action - 2008
-                </li>
+                    <div class="col-md-5">
 
-                <li class="list-group-item">
-                    <strong>The Godfather</strong>
-                    - Crime - 1972
-                </li>
+                        <label class="form-label">
+                            Genre
+                        </label>
 
-                <li class="list-group-item">
-                    <strong>Interstellar</strong>
-                    - Sci-Fi - 2014
-                </li>
+                        <select name="genre"
+                                class="form-select">
 
-                <li class="list-group-item">
-                    <strong>The Matrix</strong>
-                    - Sci-Fi - 1999
-                </li>
+                            <option value="">
+                                All Genres
+                            </option>
 
-            </ul>
+                            <option value="Sci-Fi"
+                                @selected($genre == 'Sci-Fi')>
+                                Sci-Fi
+                            </option>
+
+                            <option value="Action"
+                                @selected($genre == 'Action')>
+                                Action
+                            </option>
+
+                            <option value="Crime"
+                                @selected($genre == 'Crime')>
+                                Crime
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="col-md-5">
+
+                        <label class="form-label">
+                            Search
+                        </label>
+
+                        <input
+                            type="text"
+                            name="search"
+                            value="{{ $search }}"
+                            class="form-control"
+                            placeholder="Search movie..."
+                        >
+
+                    </div>
+
+
+                    <div class="col-md-2 d-flex align-items-end">
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-100">
+                            Filter
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
 
         </div>
 
     </div>
 
-
-    <!-- Movies Table -->
 
     <h2>All Movies</h2>
 
@@ -97,14 +127,12 @@
         <thead class="table-dark">
 
             <tr>
-
                 <th>ID</th>
                 <th>Title</th>
                 <th>Director</th>
                 <th>Genre</th>
                 <th>Year</th>
                 <th>Action</th>
-
             </tr>
 
         </thead>
@@ -127,8 +155,9 @@
 
                     <td>
 
-                        <a href="{{ route('movies.show', $movie['id']) }}"
-                           class="btn btn-info btn-sm">
+                        <a
+                            href="{{ route('movies.show', $movie['id']) }}"
+                            class="btn btn-info btn-sm">
                             View
                         </a>
 
@@ -154,25 +183,22 @@
     </table>
 
 
-    <!-- Add Movie -->
-
     <div class="text-center mt-4">
 
-        <a href="{{ route('movies.create') }}"
-           class="btn btn-success btn-lg">
+        <a
+            href="{{ route('movies.create') }}"
+            class="btn btn-success btn-lg">
             + Add Movie
         </a>
 
     </div>
 
 
-    <!-- Prepared By -->
-
     <div class="text-center mt-5 mb-3">
 
-        <p class="mb-0">
+        <p>
             Prepared by:
-            <strong>Aira Basco</strong>
+            <strong>Edshieline kaye</strong>
         </p>
 
     </div>

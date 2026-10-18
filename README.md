@@ -1,13 +1,9 @@
- ITRACKB4 LA7 - Movie Application
+ITrackB4 — Lab Activity 9
 
- Q1. Why does the form use POST instead of GET?
+ F1 — Nullable Column
+I made the `description` column nullable. I chose this one because not every movie has a summary or synopsis available right away; title, director, and release year are always required information, but a description is extra and can be added later.
 
-The form uses POST because it is sending data that will be saved as a new movie. If GET was used, the submitted information would become part of the URL and the browser could repeat the request when the page is refreshed. This could cause the same movie to be saved again. POST with redirect helps avoid that problem.
-
- Q2. What stops the save when validation fails?
-
-The `$request->validate()` method checks the submitted values before the save code continues. When a rule fails, Laravel automatically stops the controller at that point and redirects the visitor back to the form with the validation errors and old input. Because the code after validation is not reached, the movie is not saved.
-
- Q3. Why does the success message only appear once?
-
-The success message is stored in the session using `with('success', ...)` when the movie is saved. The layout checks the session and displays the message because the layout is loaded on every page. However, the session message is temporary, so after it is read, it does not keep appearing when the visitor goes to another page.
+F2 — First Failed Step
+The first failure happened when I tried to create a record in Tinker before adding `$fillable`. The error said `Add [title] to fillable property to allow mass assignment on [App\Models\Movie]`. It meant I needed to list which columns can be set using the `::create()` method.
+ F3 — Why Blade Files Did Not Change
+The pages still work because the controller passes variables with the **exact same names** (`$movies` and `$movie`) as before. The Blade templates only read variables — they do not care if the data came from a hardcoded array or a database table.

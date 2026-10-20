@@ -9,7 +9,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            MovieSeeder::class,
+            BookSeeder::class, // ✅ SIGURADUHIN NANDITO ITO!
         ]);
     }
 }

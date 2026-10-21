@@ -1,47 +1,35 @@
-@extends('layouts.app')
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{{ $movie->title }}</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        dt { font-weight: bold; margin-top: 1rem; }
+    </style>
+</head>
+<body>
 
-@section('title', $movie['title'])
+<h1>{{ $movie->title }}</h1>
 
-@section('content')
+<dl>
+    <dt>Director</dt>
+    <dd>{{ $movie->director }}</dd>
 
-<div class="container mt-4">
+    <dt>Year</dt>
+    <dd>{{ $movie->year }}</dd>
 
-    <h1>{{ $movie['title'] }}</h1>
+    <dt>Genre</dt>
+    <dd>{{ $movie->genre->name }}</dd>
 
-    <table class="table table-bordered">
+    <dt>Featured</dt>
+    <dd>{{ $movie->is_featured ? 'Yes' : 'No' }}</dd>
 
-        <tr>
-            <th>ID</th>
-            <td>{{ $movie['id'] }}</td>
-        </tr>
+    <dt>Description</dt>
+    <dd>{{ $movie->description ?? 'No description provided.' }}</dd>
+</dl>
 
-        <tr>
-            <th>Title</th>
-            <td>{{ $movie['title'] }}</td>
-        </tr>
+<p><a href="{{ route('movies.index') }}">← Back to List</a></p>
 
-        <tr>
-            <th>Director</th>
-            <td>{{ $movie['director'] }}</td>
-        </tr>
-
-        <tr>
-            <th>Genre</th>
-            <td>{{ $movie['genre'] }}</td>
-        </tr>
-
-        <tr>
-            <th>Year</th>
-            <td>{{ $movie['year'] }}</td>
-        </tr>
-
-    </table>
-
-    <a href="{{ route('movies.index') }}"
-       class="btn btn-secondary">
-        Back to Movies
-    </a>
-
-</div>
-
-@endsection
+</body>
+</html>

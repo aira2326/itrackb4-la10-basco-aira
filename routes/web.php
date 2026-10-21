@@ -1,12 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BookController;
+use App\Http\Controllers\MovieController;
 
-Route::get('/books', [BookController::class, 'index'])->name('books.index');
-Route::get('/books/create', [BookController::class, 'create'])->name('books.create');
-Route::post('/books', [BookController::class, 'store'])->name('books.store');
-Route::get('/books/{id}', [BookController::class, 'show'])->name('books.show');
-Route::get('/books/featured', [BookController::class, 'featured'])->name('books.featured');
-// ✅ Ito ang nawala — ilagay ito
-Route::get('/books/category/{cat}', [BookController::class, 'category'])->name('books.category');
+Route::get('/', function () {
+    return view('welcome');
+});
+
+// Movies routes
+Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
+Route::get('/movies/create', [MovieController::class, 'create'])->name('movies.create');
+Route::post('/movies', [MovieController::class, 'store'])->name('movies.store');
+Route::get('/movies/{id}', [MovieController::class, 'show'])->name('movies.show');

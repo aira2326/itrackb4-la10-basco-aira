@@ -1,182 +1,100 @@
-@extends('layouts.app')
-
-@section('title', 'Movies')
-
-@section('content')
-
-<div class="container mt-4">
-
-    <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-
-        <h1>Movies</h1>
-
-    </div>
-
-
-    <!-- Navigation -->
-    <div class="mb-3">
-
-        <a href="{{ route('movies.index') }}"
-           class="btn btn-secondary">
-            All Movies
-        </a>
-
-        <a href="{{ route('movies.featured') }}"
-           class="btn btn-primary">
-            Featured
-        </a>
-
-        <a href="{{ route('movies.filter', ['genre' => 'Sci-Fi']) }}"
-           class="btn btn-info">
-            Sci-Fi
-        </a>
-
-        <a href="{{ route('movies.filter', ['genre' => 'Action']) }}"
-           class="btn btn-warning">
-            Action
-        </a>
-
-        <a href="{{ route('movies.filter', ['genre' => 'Crime']) }}"
-           class="btn btn-danger">
-            Crime
-        </a>
-
-    </div>
-
-
-    <!-- List of Recommendations -->
-    <div class="card mb-4">
-
-        <div class="card-header bg-primary text-white">
-            List of Recommendations
-        </div>
-
-        <div class="card-body">
-
-            <ul class="list-group">
-
-                <li class="list-group-item">
-                    <strong>Inception</strong>
-                    - Sci-Fi - 2010
-                </li>
-
-                <li class="list-group-item">
-                    <strong>The Dark Knight</strong>
-                    - Action - 2008
-                </li>
-
-                <li class="list-group-item">
-                    <strong>The Godfather</strong>
-                    - Crime - 1972
-                </li>
-
-                <li class="list-group-item">
-                    <strong>Interstellar</strong>
-                    - Sci-Fi - 2014
-                </li>
-
-                <li class="list-group-item">
-                    <strong>The Matrix</strong>
-                    - Sci-Fi - 1999
-                </li>
-
-            </ul>
-
-        </div>
-
-    </div>
-
-
-    <!-- Movies Table -->
-
-    <h2>All Movies</h2>
-
-    <table class="table table-bordered table-striped">
-
-        <thead class="table-dark">
-
-            <tr>
-
-                <th>ID</th>
-                <th>Title</th>
-                <th>Director</th>
-                <th>Genre</th>
-                <th>Year</th>
-                <th>Action</th>
-
-            </tr>
-
-        </thead>
-
-        <tbody>
-
-            @forelse ($movies as $movie)
-
-                <tr>
-
-                    <td>{{ $movie['id'] }}</td>
-
-                    <td>{{ $movie['title'] }}</td>
-
-                    <td>{{ $movie['director'] }}</td>
-
-                    <td>{{ $movie['genre'] }}</td>
-
-                    <td>{{ $movie['year'] }}</td>
-
-                    <td>
-
-                        <a href="{{ route('movies.show', $movie['id']) }}"
-                           class="btn btn-info btn-sm">
-                            View
-                        </a>
-
-                    </td>
-
-                </tr>
-
-            @empty
-
-                <tr>
-
-                    <td colspan="6"
-                        class="text-center">
-                        No movies found.
-                    </td>
-
-                </tr>
-
-            @endforelse
-
-        </tbody>
-
-    </table>
-
-
-    <!-- Add Movie -->
-
-    <div class="text-center mt-4">
-
-        <a href="{{ route('movies.create') }}"
-           class="btn btn-success btn-lg">
-            + Add Movie
-        </a>
-
-    </div>
-
-
-    <!-- Prepared By -->
-
-    <div class="text-center mt-5 mb-3">
-
-        <p class="mb-0">
-            Prepared by:
-            <strong>Aira Basco</strong>
-        </p>
-
-    </div>
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Movie Collection</title>
+    <style>
+        body { font-family: sans-serif; max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+        
+        .prepared { 
+            text-align: center; 
+            margin-bottom: 0.5rem; 
+            color: #555; 
+            font-size: 0.95rem; 
+        }
+        
+        h1 { text-align: center; margin-bottom: 0.3rem; }
+        
+        .nav-buttons { margin: 1rem 0; text-align: center; }
+        .nav-label { font-weight: bold; margin-right: 8px; }
+        .nav-btn { 
+            display: inline-block; 
+            padding: 6px 14px; 
+            margin-right: 8px; 
+            border-radius: 4px; 
+            color: white; 
+            text-decoration: none; 
+            font-size: 0.9rem;
+        }
+        .btn-all { background: #6c757d; }    /* Gray */
+        .btn-sci { background: #007bff; }   /* Blue */
+        .btn-act { background: #ffc107; color: #212529; } /* Yellow */
+        .btn-crime { background: #dc3545; } /* Red */
+        
+        .all-genre { 
+            text-align: center; 
+            color: #666; 
+            margin: 0.5rem 0 1.5rem; 
+            font-style: italic; 
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+        th, td { border: 1px solid #ccc; padding: 0.6rem; text-align: left; }
+        th { background: #f5f5f5; }
+        a { text-decoration: none; color: #0066cc; }
+        .add-link { text-align: center; margin-top: 1rem; }
+        .query-count { text-align: center; margin-top: 1rem; font-weight: bold; color: #d9534f; }
+    </style>
+</head>
+<body>
+
+
+
+<h1>My Movie Collection</h1>
+
+{{-- ✅ Mga button sa itaas — katulad ng larawan --}}
+<div class="nav-buttons">
+    <span class="nav-label">Movies</span>
+    <a href="{{ route('movies.index') }}" class="nav-btn btn-all">All Movies</a>
+    <a href="{{ route('movies.index', ['genre_id' => 1]) }}" class="nav-btn btn-sci">Sci-Fi</a>
+    <a href="{{ route('movies.index', ['genre_id' => 2]) }}" class="nav-btn btn-act">Action</a>
+    <a href="{{ route('movies.index', ['genre_id' => 3]) }}" class="nav-btn btn-crime">Crime</a>
 </div>
 
-@endsection
+<p class="prepared">Prepared by Aira Basco</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Director</th>
+            <th>Genre</th>
+            <th>Featured</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($movies as $movie)
+        <tr>
+            <td>{{ $movie->id }}</td>
+            <td>
+                <a href="{{ route('movies.show', $movie->id) }}">
+                    {{ $movie->title }}
+                </a>
+            </td>
+            <td>{{ $movie->director }}</td>
+            <td>{{ $movie->genre->name }}</td>
+            <td>{{ $movie->is_featured ? 'Yes' : 'No' }}</td>
+            <td>{{ $movie->description ?? '—' }}</td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>
+
+<p class="add-link"><a href="{{ route('movies.create') }}">+ Add New Movie</a></p>
+
+<p class="query-count">Queries: {{ count(\Illuminate\Support\Facades\DB::getQueryLog()) }}</p>
+
+</body>
+</html>

@@ -2,50 +2,61 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Add New Movie</title>
+    <title>Add Movie</title>
+    <style>
+        body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; padding: 0 1rem; }
+        label { display: block; margin-top: 1rem; font-weight: bold; }
+        input, select, textarea { margin-top: 0.3rem; width: 100%; padding: 0.5rem; }
+        button { margin-top: 1.5rem; padding: 0.7rem 1.5rem; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .error { color: red; margin-top: 0.3rem; font-size: 0.9rem; }
+    </style>
 </head>
 <body>
-    <h1>Add New Movie</h1>
 
-    @if(session('success'))
-        <p style="color: green;">{{ session('success') }}</p>
-    @endif
+<h1>Add New Movie</h1>
 
-    <form action="{{ url('/movies') }}" method="POST">
-        @csrf
+<form method="POST" action="{{ route('movies.store') }}">
+    @csrf
 
-        <p>
-            <label>Title:</label><br>
-            <input type="text" name="title" required>
-        </p>
+    <label>Title</label>
+    <input type="text" name="title" value="{{ old('title') }}">
+    @error('title') <p class="error">{{ $message }}</p> @enderror
 
-        <p>
-            <label>Director:</label><br>
-            <input type="text" name="director" required>
-        </p>
+    <label>Director</label>
+    <input type="text" name="director" value="{{ old('director') }}">
+    @error('director') <p class="error">{{ $message }}</p> @enderror
 
-        <p>
-            <label>Year:</label><br>
-            <input type="number" name="year" required>
-        </p>
+    <label>Year</label>
+    <input type="number" name="year" value="{{ old('year') }}">
+    @error('year') <p class="error">{{ $message }}</p> @enderror
 
-        <p>
-            <label>Featured:</label>
-            <input type="checkbox" name="is_featured" value="1">
-        </p>
+    <label>Genre</label>
+    <select name="genre_id">
+        <option value="">-- Select Genre --</option>
+        @foreach ($genres as $genre)
+            <option value="{{ $genre->id }}"
+                @selected(old('genre_id') == $genre->id)>
+                {{ $genre->name }}
+            </option>
+        @endforeach
+    </select>
+    @error('genre_id') <p class="error">{{ $message }}</p> @enderror
 
-        <p>
-            <label>Synopsis:</label><br>
-            <textarea name="synopsis" rows="4" cols="50"></textarea>
-        </p>
+    <label>Featured?</label>
+    <select name="is_featured">
+        <option value="1" @selected(old('is_featured') == '1')>Yes</option>
+        <option value="0" @selected(old('is_featured') == '0')>No</option>
+    </select>
+    @error('is_featured') <p class="error">{{ $message }}</p> @enderror
 
-        <p>
-            <button type="submit">Save Movie</button>
-        </p>
-    </form>
+    <label>Description (optional)</label>
+    <textarea name="description" rows="4">{{ old('description') }}</textarea>
+    @error('description') <p class="error">{{ $message }}</p> @enderror
 
-    <p>
-        <a href="{{ url('/movies') }}">← Back to List</a>
-    </p>
+    <button type="submit">Add Movie</button>
+</form>
+
+<p><a href="{{ route('movies.index') }}">← Back to List</a></p>
+
 </body>
 </html>
